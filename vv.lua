@@ -21,8 +21,8 @@ end
 
 -- ====== KONFIGURACJA ======
 local Window = Rayfield:CreateWindow({
-    Name = "BlazeCode x Turcja",
-    Subtitle = "Powered by turcja",
+    Name = "BlazeCode x Turcja 🇹🇷",
+    Subtitle = "Advanced Pentest Suite",
     LoadingTitle = "BlazeCode x Turcja",
     LoadingSubtitle = "by BlazeCode",
     ConfigurationSaving = {
@@ -201,25 +201,6 @@ player.CharacterAdded:Connect(function(newChar)
     humanoid = char:WaitForChild("Humanoid")
     rootPart = char:WaitForChild("HumanoidRootPart")
     isAlive = true
-    
-    if flyEnabled then
-        task.wait(0.5)
-        -- fly restart logic
-    end
-    if noclipEnabled then
-        task.wait(0.5)
-        -- noclip restart
-    end
-    if wallhackEnabled then
-        task.wait(0.5)
-        -- wallhack restart
-    end
-    if speedEnabled then
-        task.wait(0.5)
-        if humanoid then
-            humanoid.WalkSpeed = 16 * speedMultiplier
-        end
-    end
 end)
 
 humanoid.Died:Connect(function()
@@ -265,14 +246,13 @@ function toggleFly()
         
         flyConnection = runService.RenderStepped:Connect(function()
             if not flyEnabled or not rootPart or not rootPart.Parent then
-                toggleFly()
+                if flyEnabled then toggleFly() end
                 return
             end
             
             local moveDir = Vector3.new(0, 0, 0)
             local camCF = camera.CFrame
             
-            -- WSAD
             if userInput:IsKeyDown(Enum.KeyCode.W) then
                 moveDir = moveDir + (camCF.LookVector * Vector3.new(1, 0, 1))
             end
@@ -286,7 +266,6 @@ function toggleFly()
                 moveDir = moveDir + (camCF.RightVector * Vector3.new(1, 0, 1))
             end
             
-            -- Space = góra, LShift = dół
             if userInput:IsKeyDown(Enum.KeyCode.Space) then
                 moveDir = moveDir + Vector3.new(0, 1, 0)
             end
@@ -328,7 +307,7 @@ function toggleSpeedFly()
         
         speedFlyConnection = runService.RenderStepped:Connect(function()
             if not speedFlyActive or not rootPart or not rootPart.Parent then
-                toggleSpeedFly()
+                if speedFlyActive then toggleSpeedFly() end
                 return
             end
             
@@ -456,13 +435,12 @@ function toggleWallhack()
     end
 end
 
--- ====== ESP (ZAawansowany) ======
+-- ====== ESP ======
 function createEsp(targetPlayer)
     if espObjects[targetPlayer] then return end
     
     local espData = {}
     
-    -- Box
     local box = Drawing.new("Square")
     box.Visible = false
     box.Color = Color3.fromRGB(255, 50, 50)
@@ -471,7 +449,6 @@ function createEsp(targetPlayer)
     box.Transparency = 1
     espData.box = box
     
-    -- Health Bar
     local healthBar = Drawing.new("Square")
     healthBar.Visible = false
     healthBar.Color = Color3.fromRGB(0, 255, 0)
@@ -479,7 +456,6 @@ function createEsp(targetPlayer)
     healthBar.Transparency = 1
     espData.healthBar = healthBar
     
-    -- Health Bar BG
     local healthBarBg = Drawing.new("Square")
     healthBarBg.Visible = false
     healthBarBg.Color = Color3.fromRGB(0, 0, 0)
@@ -487,7 +463,6 @@ function createEsp(targetPlayer)
     healthBarBg.Transparency = 0.5
     espData.healthBarBg = healthBarBg
     
-    -- Name
     local nameLabel = Drawing.new("Text")
     nameLabel.Visible = false
     nameLabel.Color = Color3.fromRGB(255, 255, 255)
@@ -496,7 +471,6 @@ function createEsp(targetPlayer)
     nameLabel.Outline = true
     espData.nameLabel = nameLabel
     
-    -- Distance
     local distLabel = Drawing.new("Text")
     distLabel.Visible = false
     distLabel.Color = Color3.fromRGB(200, 200, 200)
@@ -505,14 +479,12 @@ function createEsp(targetPlayer)
     distLabel.Outline = true
     espData.distLabel = distLabel
     
-    -- Tracer
     local tracer = Drawing.new("Line")
     tracer.Visible = false
     tracer.Color = Color3.fromRGB(255, 255, 255)
     tracer.Thickness = 1
     espData.tracer = tracer
     
-    -- Head dot
     local headDot = Drawing.new("Circle")
     headDot.Visible = false
     headDot.Color = Color3.fromRGB(255, 50, 50)
@@ -562,7 +534,6 @@ function updateEsp()
                         local boxX = hrpPos.X - boxWidth / 2
                         local boxY = hrpPos.Y - boxHeight / 2
                         
-                        -- Box
                         if boxEspEnabled then
                             espData.box.Visible = true
                             espData.box.Size = Vector2.new(boxWidth, boxHeight)
@@ -571,7 +542,6 @@ function updateEsp()
                             espData.box.Visible = false
                         end
                         
-                        -- Health Bar
                         if healthBarEnabled and boxEspEnabled then
                             local hum = getHumanoid(p)
                             if hum then
@@ -595,7 +565,6 @@ function updateEsp()
                             if espData.healthBarBg then espData.healthBarBg.Visible = false end
                         end
                         
-                        -- Name
                         if nameEspEnabled then
                             espData.nameLabel.Visible = true
                             espData.nameLabel.Position = Vector2.new(hrpPos.X, boxY - 16)
@@ -604,7 +573,6 @@ function updateEsp()
                             espData.nameLabel.Visible = false
                         end
                         
-                        -- Distance
                         if distanceEspEnabled then
                             local dist = math.floor((rootPart.Position - hrp.Position).Magnitude)
                             espData.distLabel.Visible = true
@@ -614,7 +582,6 @@ function updateEsp()
                             espData.distLabel.Visible = false
                         end
                         
-                        -- Tracer
                         if tracerEnabled then
                             espData.tracer.Visible = true
                             espData.tracer.From = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y)
@@ -623,7 +590,6 @@ function updateEsp()
                             espData.tracer.Visible = false
                         end
                         
-                        -- Head dot
                         espData.headDot.Visible = true
                         espData.headDot.Position = Vector2.new(headPos.X, headPos.Y)
                     end
@@ -654,7 +620,6 @@ function updateEsp()
         end
     end
     
-    -- Cleanup disconnected players
     for p, data in pairs(espObjects) do
         if not players:FindFirstChild(p.Name) then
             if data.box then data.box:Remove() end
@@ -669,7 +634,6 @@ function updateEsp()
     end
 end
 
--- ESP Render Loop
 task.spawn(function()
     while task.wait() do
         updateEsp()
@@ -684,31 +648,8 @@ function startAimbot()
     
     if aimbotEnabled or silentAimEnabled then
         if silentAimEnabled then
-            -- Silent Aim - modyfikacja hitboxa
-            local mt = getrawmetatable(game)
-            local oldIndex = mt.__index
-            local oldNamecall = mt.__namecall
-            
-            setreadonly(mt, false)
-            
-            mt.__namecall = newcclosure(function(self, ...)
-                local method = getnamecallmethod()
-                
-                if method == "FireServer" and silentAimEnabled then
-                    local args = {...}
-                    if self.Name == "RemoteEvent" or self:IsA("RemoteEvent") then
-                        -- Try to silent aim
-                    end
-                end
-                
-                return oldNamecall(self, ...)
-            end)
-            
-            setreadonly(mt, true)
-            
             notify("🎯 Silent Aim ON", 2)
         end
-        
         if aimbotEnabled then
             notify("🎯 Aimbot ON (FOV: " .. tostring(aimbotFov) .. "°)", 2)
         end
@@ -722,11 +663,9 @@ function startAimbot()
                 if head then
                     local targetPos = head.Position
                     local smoothFactor = aimbotSmooth / 10
-                    
                     local currentCF = camera.CFrame
                     local targetCF = CFrame.lookAt(camera.CFrame.Position, targetPos)
                     local newCF = currentCF:Lerp(targetCF, smoothFactor)
-                    
                     camera.CFrame = newCF
                 end
             end
@@ -789,7 +728,7 @@ function toggleTriggerbot()
     end
 end
 
--- ====== TEPANIE (Teleport) ======
+-- ====== TELEPORTACJA ======
 function teleportToPlayer(targetPlayer)
     if not targetPlayer then
         notify("❌ Nie wybrano gracza!", 3)
@@ -806,20 +745,6 @@ function teleportToPlayer(targetPlayer)
     end
 end
 
-function teleportToPlayerClick(targetPlayer)
-    if not targetPlayer then
-        notify("❌ Nie wybrano gracza!", 3)
-        return
-    end
-    
-    local hrp = getRoot(targetPlayer)
-    if hrp and rootPart then
-        rootPart.CFrame = CFrame.new(hrp.Position)
-        notify("📡 Teleport przez klik do " .. targetPlayer.Name, 2)
-    end
-end
-
--- ====== OGLADANIE GRACZA ======
 function spectatePlayer(targetPlayer)
     if not targetPlayer then
         notify("❌ Nie wybrano gracza!", 3)
@@ -830,7 +755,6 @@ function spectatePlayer(targetPlayer)
         local cam = workspace.CurrentCamera
         cam.CameraSubject = targetPlayer.Character:FindFirstChildWhichIsA("Humanoid")
         cam.CameraType = Enum.CameraType.Custom
-        
         notify("👁️ Ogladasz: " .. targetPlayer.Name, 3)
     end
 end
@@ -847,7 +771,6 @@ end
 -- ====== BRING ALL ======
 function bringAllPlayers()
     if not rootPart then return end
-    
     for _, p in pairs(players:GetPlayers()) do
         if p ~= player then
             local hrp = getRoot(p)
@@ -862,7 +785,6 @@ end
 -- ====== FLING ALL ======
 function flingAllPlayers()
     if not rootPart then return end
-    
     for _, p in pairs(players:GetPlayers()) do
         if p ~= player then
             local hrp = getRoot(p)
@@ -892,14 +814,12 @@ function sendBypassMessage(msg)
             local c = msg:sub(i, i)
             table.insert(chars, c)
         end
-        table.insert(chars, " ") -- anti-filter
+        table.insert(chars, " ")
         local bypassed = table.concat(chars, "")
-        
         pcall(function()
             chatService:Chat(char.Head, bypassed, Enum.ChatColor.White)
         end)
     else
-        -- Try alternative chat bypass
         pcall(function()
             local chatRemote = replicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") or 
                               replicatedStorage:FindFirstChild("ChatServiceRemote")
@@ -953,17 +873,15 @@ function toggleXray()
 end
 
 -- ====== NO FALL DAMAGE ======
-if noFallDamage then
-    local fallConnection
-    fallConnection = runService.Stepped:Connect(function()
-        if isAlive and humanoid then
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
-            humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
-            humanoid.BreakJointsOnDeath = false
-        end
-    end)
-end
+local fallConnection
+fallConnection = runService.Stepped:Connect(function()
+    if isAlive and humanoid then
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+        humanoid:SetStateEnabled(Enum.HumanoidStateType.Physics, false)
+        humanoid.BreakJointsOnDeath = false
+    end
+end)
 
 -- ====== ANTY-LOCK ======
 local antiLockConnection
@@ -971,7 +889,7 @@ if antiLock then
     antiLockConnection = runService.Stepped:Connect(function()
         if isAlive and char then
             for _, v in pairs(char:GetChildren()) do
-                if v:IsA("BoolValue") and v.Name:lower():find("lock") or v.Name:lower():find("grab") or v.Name:lower():find("stun") then
+                if v:IsA("BoolValue") and (v.Name:lower():find("lock") or v.Name:lower():find("grab") or v.Name:lower():find("stun")) then
                     v:Destroy()
                 end
             end
@@ -981,21 +899,18 @@ end
 
 -- ====== ANTY-REPORT ======
 if antiReport then
-    local reportService = game:GetService("BadgeService")
-    local oldFire = nil
     pcall(function()
         local mt = getrawmetatable(game)
-        oldFire = mt.__namecall
         setreadonly(mt, false)
+        local oldNamecall = mt.__namecall
         mt.__namecall = newcclosure(function(self, ...)
             local method = getnamecallmethod()
             if method == "FireServer" or method == "InvokeServer" then
-                local args = {...}
                 if self.Name:lower():find("report") or self.Name:lower():find("abuse") then
                     return
                 end
             end
-            return oldFire(self, ...)
+            return oldNamecall(self, ...)
         end)
         setreadonly(mt, true)
     end)
@@ -1004,7 +919,6 @@ end
 -- ====== FOV CIRCLE ======
 function createFovCircle()
     if fovCircle then fovCircle:Remove() end
-    
     fovCircle = Drawing.new("Circle")
     fovCircle.Visible = true
     fovCircle.Color = Color3.fromRGB(255, 255, 255)
@@ -1019,7 +933,6 @@ end
 -- ====== WATERMARK ======
 function createWatermark()
     if waterMark then waterMark:Remove() end
-    
     waterMark = Drawing.new("Text")
     waterMark.Visible = true
     waterMark.Color = Color3.fromRGB(255, 215, 0)
@@ -1051,13 +964,12 @@ end)
 if teleportOnClick then
     userInput.InputBegan:Connect(function(input, gameProcessed)
         if gameProcessed then return end
-        if input.UserInputType == Enum.UserInputType.MouseButton2 then -- Right click
+        if input.UserInputType == Enum.UserInputType.MouseButton2 then
             local mousePos = userInput:GetMouseLocation()
             local ray = camera:ViewportPointToRay(mousePos.X, mousePos.Y)
             local raycastParams = RaycastParams.new()
             raycastParams.FilterType = Enum.RaycastFilterType.Whitelist
             raycastParams.FilterDescendantsInstances = {workspace}
-            
             local result = workspace:Raycast(ray.Origin, ray.Direction * 5000, raycastParams)
             if result and result.Position and rootPart then
                 rootPart.CFrame = CFrame.new(result.Position + Vector3.new(0, 2, 0))
@@ -1067,16 +979,23 @@ if teleportOnClick then
     end)
 end
 
--- ====== GUI - TWORZENIE ZAKLADEK ======
+-- ====== INFINITE JUMP ======
+userInput.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == Enum.KeyCode.Space and infiniteJumpEnabled and isAlive and humanoid then
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end)
 
--- ===== MAIN TAB =====
+-- ====== TWORZENIE GUI ======
+
+-- MAIN TAB
 local MainTab = Window:CreateTab("🏠 Main", 4483362458)
-
 local MovementSection = MainTab:CreateSection("🚀 Movement")
 
 MainTab:CreateToggle({
     Name = "Fly (Ctrl+F)",
-    Info = "Latanie z myszka - Spacja gora, Shift dol",
+    Info = "Latanie - Spacja gora, Shift dol",
     CurrentValue = false,
     Flag = "FlyToggle",
     Callback = function(val)
@@ -1086,6 +1005,7 @@ MainTab:CreateToggle({
 
 MainTab:CreateSlider({
     Name = "Fly Speed",
+    Info = "Predkosc latania",
     Min = 10,
     Max = 300,
     Default = 50,
@@ -1099,7 +1019,7 @@ MainTab:CreateSlider({
 
 MainTab:CreateToggle({
     Name = "Speed Fly",
-    Info = "Bardzo szybkie latanie (Velocity based)",
+    Info = "Bardzo szybkie latanie",
     CurrentValue = false,
     Flag = "SpeedFlyToggle",
     Callback = function(val)
@@ -1109,6 +1029,7 @@ MainTab:CreateToggle({
 
 MainTab:CreateSlider({
     Name = "Speed Fly Speed",
+    Info = "Predkosc Speed Fly",
     Min = 50,
     Max = 500,
     Default = 100,
@@ -1132,6 +1053,7 @@ MainTab:CreateToggle({
 
 MainTab:CreateSlider({
     Name = "Speed Multiplier",
+    Info = "Mnoznik predkosci",
     Min = 1,
     Max = 10,
     Default = 2,
@@ -1169,7 +1091,7 @@ MainTab:CreateToggle({
 
 MainTab:CreateToggle({
     Name = "Infinite Jump",
-    Info = "Nieskonczony skok",
+    Info = "Nieskonczony skok (spacja)",
     CurrentValue = false,
     Flag = "InfJumpToggle",
     Callback = function(val)
@@ -1178,21 +1100,10 @@ MainTab:CreateToggle({
     end
 })
 
--- Infinite Jump handler
-local infJumpConnection
-infJumpConnection = userInput.InputBegan:Connect(function(input, gp)
-    if gp then return end
-    if input.KeyCode == Enum.KeyCode.Space and infiniteJumpEnabled and isAlive and humanoid then
-        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-    end
-end)
-
--- ===== TELEPORT TAB =====
+-- TELEPORT TAB
 local TeleportTab = Window:CreateTab("📡 Teleporty", 4483362458)
-
 local TeleportSection = TeleportTab:CreateSection("🎯 Teleportacja")
 
--- Player Select Dropdown
 local playerNames = {}
 for _, p in pairs(players:GetPlayers()) do
     if p ~= player then
@@ -1213,7 +1124,6 @@ local TeleportDropdown = TeleportTab:CreateDropdown({
     end
 })
 
--- Aktualizuj liste graczy
 players.PlayerAdded:Connect(function(p)
     if p ~= player then
         task.wait(1)
@@ -1240,7 +1150,7 @@ end)
 
 TeleportTab:CreateButton({
     Name = "📡 Teleportuj do wybranego (T)",
-    Info = "Teleportacja do zaznaczonego gracza (lub nacisnij T)",
+    Info = "Teleportacja do zaznaczonego gracza",
     Callback = function()
         if selectedPlayer then
             teleportToPlayer(selectedPlayer)
@@ -1271,7 +1181,7 @@ TeleportTab:CreateButton({
 })
 
 TeleportTab:CreateToggle({
-    Name = "Teleport przez klik (RMB)",
+    Name = "Teleport przez klik (PPM)",
     Info = "Kliknij PPM aby teleportowac sie w miejsce",
     CurrentValue = false,
     Flag = "ClickTPToggle",
@@ -1281,14 +1191,13 @@ TeleportTab:CreateToggle({
     end
 })
 
--- ===== COMBAT TAB =====
+-- COMBAT TAB
 local CombatTab = Window:CreateTab("⚔️ Combat", 4483362458)
-
 local AimbotSection = CombatTab:CreateSection("🎯 Aimbot")
 
 CombatTab:CreateToggle({
     Name = "Aimbot",
-    Info = "Automatyczne celowanie w najblizszego gracza",
+    Info = "Automatyczne celowanie",
     CurrentValue = false,
     Flag = "AimbotToggle",
     Callback = function(val)
@@ -1299,7 +1208,7 @@ CombatTab:CreateToggle({
 
 CombatTab:CreateToggle({
     Name = "Silent Aim",
-    Info = "Celowanie bez widocznego poruszania myszka",
+    Info = "Celowanie bez widocznego ruchu myszka",
     CurrentValue = false,
     Flag = "SilentAimToggle",
     Callback = function(val)
@@ -1310,6 +1219,7 @@ CombatTab:CreateToggle({
 
 CombatTab:CreateSlider({
     Name = "Aimbot FOV",
+    Info = "Zasieg aimbota w stopniach",
     Min = 10,
     Max = 360,
     Default = 90,
@@ -1324,6 +1234,7 @@ CombatTab:CreateSlider({
 
 CombatTab:CreateSlider({
     Name = "Aimbot Smoothness",
+    Info = "Wygladzenie aimbota (1-szybki, 20-wolny)",
     Min = 1,
     Max = 20,
     Default = 5,
@@ -1351,7 +1262,7 @@ CombatTab:CreateToggle({
 
 CombatTab:CreateToggle({
     Name = "Triggerbot",
-    Info = "Automatyczny strzal gdy celownik jest na graczu",
+    Info = "Auto strzal gdy celownik jest na graczu",
     CurrentValue = false,
     Flag = "TriggerbotToggle",
     Callback = function(val)
@@ -1370,9 +1281,8 @@ CombatTab:CreateToggle({
     end
 })
 
--- ===== ESP TAB =====
+-- ESP TAB
 local EspTab = Window:CreateTab("👁️ ESP", 4483362458)
-
 local EspSection = EspTab:CreateSection("🔄 ESP Settings")
 
 EspTab:CreateToggle({
@@ -1388,7 +1298,7 @@ EspTab:CreateToggle({
 
 EspTab:CreateToggle({
     Name = "Box ESP",
-    Info = "Pokazuje ramke wokol graczy",
+    Info = "Ramka wokol graczy",
     CurrentValue = false,
     Flag = "BoxEspToggle",
     Callback = function(val)
@@ -1436,9 +1346,8 @@ EspTab:CreateToggle({
     end
 })
 
--- ===== VISUAL TAB =====
+-- VISUAL TAB
 local VisualTab = Window:CreateTab("🌈 Visuals", 4483362458)
-
 local VisualSection = VisualTab:CreateSection("🎨 Efekty wizualne")
 
 VisualTab:CreateToggle({
@@ -1485,9 +1394,8 @@ VisualTab:CreateToggle({
     end
 })
 
--- ===== MISC TAB =====
+-- MISC TAB
 local MiscTab = Window:CreateTab("🔧 Misc", 4483362458)
-
 local PlayerSection = MiscTab:CreateSection("👥 Gracze")
 
 MiscTab:CreateButton({
@@ -1577,9 +1485,8 @@ MiscTab:CreateInput({
     end
 })
 
--- ===== CREDITS TAB =====
+-- CREDITS TAB
 local CreditsTab = Window:CreateTab("⭐ Credits", 4483362458)
-
 local CreditsSection = CreditsTab:CreateSection("🇹🇷 BlazeCode x Turcja")
 
 CreditsTab:CreateLabel("BlazeCode x Turcja 🇹🇷")
@@ -1607,13 +1514,3 @@ createFovCircle()
 if fovCircle then fovCircle.Visible = false end
 
 notify("🇹🇷 BlazeCode x Turcja zaladowany!", 5)
-
--- ====== GLOWNA PETLA ======
-task.spawn(function()
-    while task.wait(5) do
-        -- Keep-alive / maintenance
-        if waterMark and waterMark.Visible then
-            -- update watermark if needed
-        end
-    end
-end)
