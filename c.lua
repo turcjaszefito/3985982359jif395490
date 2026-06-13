@@ -1,7 +1,7 @@
 --[[
-    BlazeCode x Turcja — FINAL FIXED
-    Działa w każdym executorze, GUI w pełni funkcjonalne
-    Wszystkie opcje widoczne, żadnych pustych okien
+    BlazeCode x Turcja — FINAL v3
+    Usunięto zależność od Lucide Icons (błąd 6031094663)
+    GUI działa w pełni, wszystkie opcje widoczne
 --]]
 
 -- ====== ŁADOWANIE RAYFIELD ======
@@ -21,33 +21,33 @@ for _, url in ipairs(urls) do
 end
 
 if not Rayfield then
-    -- budujemy własny GUI (fallback)
+    -- ====== FALLBACK GUI ======
     local plr = game.Players.LocalPlayer
     local sg = Instance.new("ScreenGui")
     sg.Name = "BlazeCodeTurcja"
     sg.Parent = plr:WaitForChild("PlayerGui")
 
     local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 440, 0, 600)
-    frame.Position = UDim2.new(0.5, -220, 0.5, -300)
-    frame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+    frame.Size = UDim2.new(0, 460, 0, 620)
+    frame.Position = UDim2.new(0.5, -230, 0.5, -310)
+    frame.BackgroundColor3 = Color3.fromRGB(18, 18, 28)
     frame.BorderSizePixel = 0
     frame.Draggable = true
     frame.Active = true
     frame.Parent = sg
 
     local uc = Instance.new("UICorner")
-    uc.CornerRadius = UDim.new(0, 8)
+    uc.CornerRadius = UDim.new(0, 10)
     uc.Parent = frame
 
     local titleBar = Instance.new("Frame")
-    titleBar.Size = UDim2.new(1, 0, 0, 36)
-    titleBar.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
+    titleBar.Size = UDim2.new(1, 0, 0, 38)
+    titleBar.BackgroundColor3 = Color3.fromRGB(32, 32, 48)
     titleBar.BorderSizePixel = 0
     titleBar.Parent = frame
 
     local titleUC = Instance.new("UICorner")
-    titleUC.CornerRadius = UDim.new(0, 8)
+    titleUC.CornerRadius = UDim.new(0, 10)
     titleUC.Parent = titleBar
 
     local title = Instance.new("TextLabel")
@@ -56,59 +56,60 @@ if not Rayfield then
     title.BackgroundTransparency = 1
     title.TextColor3 = Color3.fromRGB(255, 200, 80)
     title.Font = Enum.Font.GothamBold
-    title.TextSize = 20
+    title.TextSize = 22
     title.Parent = titleBar
 
-    -- notebook (tabs)
+    -- Notebook (zakładki)
     local notebook = Instance.new("Frame")
-    notebook.Size = UDim2.new(1, -10, 1, -46)
-    notebook.Position = UDim2.new(0, 5, 0, 41)
+    notebook.Size = UDim2.new(1, -10, 1, -48)
+    notebook.Position = UDim2.new(0, 5, 0, 43)
     notebook.BackgroundTransparency = 1
     notebook.Parent = frame
 
     local tabBar = Instance.new("Frame")
-    tabBar.Size = UDim2.new(1, 0, 0, 30)
+    tabBar.Size = UDim2.new(1, 0, 0, 32)
     tabBar.BackgroundTransparency = 1
     tabBar.Parent = notebook
 
-    local tabLayout = Instance.new("UIListLayout")
-    tabLayout.FillDirection = Enum.FillDirection.Horizontal
-    tabLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
-    tabLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    tabLayout.Padding = UDim.new(0, 4)
-    tabLayout.Parent = tabBar
+    local tabBarLayout = Instance.new("UIListLayout")
+    tabBarLayout.FillDirection = Enum.FillDirection.Horizontal
+    tabBarLayout.HorizontalAlignment = Enum.HorizontalAlignment.Left
+    tabBarLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    tabBarLayout.Padding = UDim.new(0, 4)
+    tabBarLayout.Parent = tabBar
 
     local pageContainer = Instance.new("ScrollingFrame")
-    pageContainer.Size = UDim2.new(1, 0, 1, -35)
-    pageContainer.Position = UDim2.new(0, 0, 0, 32)
-    pageContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    pageContainer.Size = UDim2.new(1, 0, 1, -37)
+    pageContainer.Position = UDim2.new(0, 0, 0, 34)
+    pageContainer.BackgroundColor3 = Color3.fromRGB(22, 22, 34)
     pageContainer.BorderSizePixel = 0
     pageContainer.ScrollBarThickness = 6
+    pageContainer.ScrollBarImageColor3 = Color3.fromRGB(80, 80, 110)
     pageContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
     pageContainer.Parent = notebook
 
     local pageLayout = Instance.new("UIListLayout")
-    pageLayout.Padding = UDim.new(0, 4)
+    pageLayout.Padding = UDim.new(0, 5)
     pageLayout.SortOrder = Enum.SortOrder.LayoutOrder
     pageLayout.Parent = pageContainer
 
     local pages = {}
-    local currentPage = nil
+    local activeTabBtn = nil
 
     local function createTab(name)
         local btn = Instance.new("TextButton")
-        btn.Size = UDim2.new(0, 0, 0, 26)
+        btn.Size = UDim2.new(0, 0, 0, 28)
         btn.AutomaticSize = Enum.AutomaticSize.X
-        btn.Padding = UDim.new(0, 12)
-        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
-        btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+        btn.Padding = UDim.new(0, 14)
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 72)
+        btn.TextColor3 = Color3.fromRGB(200, 200, 210)
         btn.Font = Enum.Font.GothamBold
-        btn.TextSize = 13
+        btn.TextSize = 14
         btn.Text = "  " .. name .. "  "
         btn.Parent = tabBar
 
         local btnUC = Instance.new("UICorner")
-        btnUC.CornerRadius = UDim.new(0, 4)
+        btnUC.CornerRadius = UDim.new(0, 5)
         btnUC.Parent = btn
 
         local pageFrame = Instance.new("Frame")
@@ -118,152 +119,160 @@ if not Rayfield then
         pageFrame.Parent = pageContainer
 
         local pageLayoutInner = Instance.new("UIListLayout")
-        pageLayoutInner.Padding = UDim.new(0, 4)
+        pageLayoutInner.Padding = UDim.new(0, 5)
         pageLayoutInner.SortOrder = Enum.SortOrder.LayoutOrder
         pageLayoutInner.Parent = pageFrame
 
         pages[name] = pageFrame
 
-        local function addWidget(wtype, text, opts)
+        local function addButton(text, cb)
             local container = Instance.new("Frame")
-            container.Size = UDim2.new(1, -10, 0, 0)
-            container.AutomaticSize = Enum.AutomaticSize.Y
-            container.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
+            container.Size = UDim2.new(1, -10, 0, 42)
+            container.BackgroundColor3 = Color3.fromRGB(36, 36, 52)
             container.BorderSizePixel = 0
             container.Parent = pageFrame
+            local cUC = Instance.new("UICorner"); cUC.CornerRadius = UDim.new(0, 6); cUC.Parent = container
 
-            local cUC = Instance.new("UICorner")
-            cUC.CornerRadius = UDim.new(0, 5)
-            cUC.Parent = container
+            local b = Instance.new("TextButton")
+            b.Size = UDim2.new(1, -8, 1, -8)
+            b.Position = UDim2.new(0, 4, 0, 4)
+            b.BackgroundColor3 = Color3.fromRGB(58, 58, 82)
+            b.TextColor3 = Color3.fromRGB(255, 255, 255)
+            b.Font = Enum.Font.Gotham
+            b.TextSize = 14
+            b.Text = text
+            b.Parent = container
+            local bUC = Instance.new("UICorner"); bUC.CornerRadius = UDim.new(0, 5); bUC.Parent = b
+            b.MouseButton1Click:Connect(cb)
+        end
+
+        local function addToggle(text, default, cb)
+            local container = Instance.new("Frame")
+            container.Size = UDim2.new(1, -10, 0, 42)
+            container.BackgroundColor3 = Color3.fromRGB(36, 36, 52)
+            container.BorderSizePixel = 0
+            container.Parent = pageFrame
+            local cUC = Instance.new("UICorner"); cUC.CornerRadius = UDim.new(0, 6); cUC.Parent = container
+
+            local b = Instance.new("TextButton")
+            local state = default
+            b.Size = UDim2.new(1, -8, 1, -8)
+            b.Position = UDim2.new(0, 4, 0, 4)
+            b.BackgroundColor3 = state and Color3.fromRGB(60, 180, 60) or Color3.fromRGB(58, 58, 82)
+            b.TextColor3 = Color3.fromRGB(255, 255, 255)
+            b.Font = Enum.Font.Gotham
+            b.TextSize = 14
+            b.Text = (state and "[ON]  " or "[OFF] ") .. text
+            b.Parent = container
+            local bUC = Instance.new("UICorner"); bUC.CornerRadius = UDim.new(0, 5); bUC.Parent = b
+            b.MouseButton1Click:Connect(function()
+                state = not state
+                b.BackgroundColor3 = state and Color3.fromRGB(60, 180, 60) or Color3.fromRGB(58, 58, 82)
+                b.Text = (state and "[ON]  " or "[OFF] ") .. text
+                cb(state)
+            end)
+        end
+
+        local function addSlider(text, min, max, def, inc, cb)
+            local container = Instance.new("Frame")
+            container.Size = UDim2.new(1, -10, 0, 50)
+            container.BackgroundColor3 = Color3.fromRGB(36, 36, 52)
+            container.BorderSizePixel = 0
+            container.Parent = pageFrame
+            local cUC = Instance.new("UICorner"); cUC.CornerRadius = UDim.new(0, 6); cUC.Parent = container
+
+            local val = def
+            local label = Instance.new("TextLabel")
+            label.Size = UDim2.new(1, -10, 0, 18)
+            label.Position = UDim2.new(0, 5, 0, 2)
+            label.BackgroundTransparency = 1
+            label.Text = text .. ": " .. tostring(val)
+            label.TextColor3 = Color3.fromRGB(220, 220, 220)
+            label.Font = Enum.Font.Gotham
+            label.TextSize = 13
+            label.TextXAlignment = Enum.TextXAlignment.Left
+            label.Parent = container
+
+            local sliderBg = Instance.new("Frame")
+            sliderBg.Size = UDim2.new(1, -10, 0, 12)
+            sliderBg.Position = UDim2.new(0, 5, 0, 26)
+            sliderBg.BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+            sliderBg.BorderSizePixel = 0
+            sliderBg.Parent = container
+            local sUC = Instance.new("UICorner"); sUC.CornerRadius = UDim.new(0, 6); sUC.Parent = sliderBg
+
+            local fill = Instance.new("Frame")
+            fill.Size = UDim2.new((val - min) / (max - min), 0, 1, 0)
+            fill.BackgroundColor3 = Color3.fromRGB(255, 200, 80)
+            fill.BorderSizePixel = 0
+            fill.Parent = sliderBg
+            local fUC = Instance.new("UICorner"); fUC.CornerRadius = UDim.new(0, 6); fUC.Parent = fill
+
+            sliderBg.MouseButton1Down:Connect(function()
+                local conn
+                conn = game:GetService("UserInputService").InputChanged:Connect(function()
+                    local pos = game:GetService("UserInputService"):GetMouseLocation()
+                    local absPos = sliderBg.AbsolutePosition
+                    local absSize = sliderBg.AbsoluteSize
+                    local relX = math.clamp((pos.X - absPos.X) / absSize.X, 0, 1)
+                    val = min + (max - min) * relX
+                    val = math.floor(val / inc + 0.5) * inc
+                    val = math.clamp(val, min, max)
+                    fill.Size = UDim2.new((val - min) / (max - min), 0, 1, 0)
+                    label.Text = text .. ": " .. tostring(val)
+                    cb(val)
+                end)
+                sliderBg.MouseButton1Up:Connect(function() conn:Disconnect() end)
+                sliderBg.MouseLeave:Connect(function() if conn then conn:Disconnect() end end)
+            end)
+        end
+
+        local function addInput(text, placeholder, cb)
+            local container = Instance.new("Frame")
+            container.Size = UDim2.new(1, -10, 0, 50)
+            container.BackgroundColor3 = Color3.fromRGB(36, 36, 52)
+            container.BorderSizePixel = 0
+            container.Parent = pageFrame
+            local cUC = Instance.new("UICorner"); cUC.CornerRadius = UDim.new(0, 6); cUC.Parent = container
 
             local label = Instance.new("TextLabel")
-            label.Size = UDim2.new(1, -10, 0, 24)
+            label.Size = UDim2.new(1, -10, 0, 18)
             label.Position = UDim2.new(0, 5, 0, 2)
             label.BackgroundTransparency = 1
             label.Text = text
             label.TextColor3 = Color3.fromRGB(220, 220, 220)
             label.Font = Enum.Font.Gotham
-            label.TextSize = 14
+            label.TextSize = 13
             label.TextXAlignment = Enum.TextXAlignment.Left
             label.Parent = container
 
-            if wtype == "button" then
-                local b = Instance.new("TextButton")
-                b.Size = UDim2.new(1, -10, 0, 28)
-                b.Position = UDim2.new(0, 5, 0, 28)
-                b.BackgroundColor3 = Color3.fromRGB(60, 60, 85)
-                b.TextColor3 = Color3.fromRGB(255, 255, 255)
-                b.Font = Enum.Font.Gotham
-                b.TextSize = 13
-                b.Text = text
-                b.Parent = container
-                local bUC = Instance.new("UICorner")
-                bUC.CornerRadius = UDim.new(0, 4)
-                bUC.Parent = b
-                container.Size = UDim2.new(1, -10, 0, 60)
-                b.MouseButton1Click:Connect(opts.callback)
-            elseif wtype == "toggle" then
-                local b = Instance.new("TextButton")
-                local state = opts.default or false
-                b.Size = UDim2.new(1, -10, 0, 28)
-                b.Position = UDim2.new(0, 5, 0, 28)
-                b.BackgroundColor3 = state and Color3.fromRGB(60, 180, 60) or Color3.fromRGB(60, 60, 85)
-                b.TextColor3 = Color3.fromRGB(255, 255, 255)
-                b.Font = Enum.Font.Gotham
-                b.TextSize = 13
-                b.Text = state and "[ON] " .. text or "[OFF] " .. text
-                b.Parent = container
-                local bUC = Instance.new("UICorner")
-                bUC.CornerRadius = UDim.new(0, 4)
-                bUC.Parent = b
-                container.Size = UDim2.new(1, -10, 0, 60)
-                b.MouseButton1Click:Connect(function()
-                    state = not state
-                    b.BackgroundColor3 = state and Color3.fromRGB(60, 180, 60) or Color3.fromRGB(60, 60, 85)
-                    b.Text = state and "[ON] " .. text or "[OFF] " .. text
-                    opts.callback(state)
-                end)
-            elseif wtype == "slider" then
-                local val = opts.default or opts.min or 0
-                local sliderFrame = Instance.new("Frame")
-                sliderFrame.Size = UDim2.new(1, -10, 0, 20)
-                sliderFrame.Position = UDim2.new(0, 5, 0, 30)
-                sliderFrame.BackgroundColor3 = Color3.fromRGB(70, 70, 90)
-                sliderFrame.BorderSizePixel = 0
-                sliderFrame.Parent = container
-
-                local fill = Instance.new("Frame")
-                fill.Size = UDim2.new((val - opts.min) / (opts.max - opts.min), 0, 1, 0)
-                fill.BackgroundColor3 = Color3.fromRGB(255, 200, 80)
-                fill.BorderSizePixel = 0
-                fill.Parent = sliderFrame
-
-                local valLabel = Instance.new("TextLabel")
-                valLabel.Size = UDim2.new(0, 50, 0, 20)
-                valLabel.Position = UDim2.new(1, -50, 0, 0)
-                valLabel.BackgroundTransparency = 1
-                valLabel.Text = tostring(val)
-                valLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-                valLabel.Font = Enum.Font.Gotham
-                valLabel.TextSize = 12
-                valLabel.Parent = container
-
-                container.Size = UDim2.new(1, -10, 0, 60)
-
-                sliderFrame.MouseButton1Down:Connect(function()
-                    local conn
-                    conn = game:GetService("UserInputService").InputChanged:Connect(function()
-                        local pos = game:GetService("UserInputService"):GetMouseLocation()
-                        local absPos = sliderFrame.AbsolutePosition
-                        local absSize = sliderFrame.AbsoluteSize
-                        local relX = math.clamp((pos.X - absPos.X) / absSize.X, 0, 1)
-                        val = opts.min + (opts.max - opts.min) * relX
-                        val = math.floor(val / (opts.increment or 1) + 0.5) * (opts.increment or 1)
-                        val = math.clamp(val, opts.min, opts.max)
-                        fill.Size = UDim2.new((val - opts.min) / (opts.max - opts.min), 0, 1, 0)
-                        valLabel.Text = tostring(val)
-                        opts.callback(val)
-                    end)
-                    sliderFrame.MouseButton1Up:Connect(function() conn:Disconnect() end)
-                end)
-            elseif wtype == "input" then
-                local box = Instance.new("TextBox")
-                box.Size = UDim2.new(1, -10, 0, 28)
-                box.Position = UDim2.new(0, 5, 0, 28)
-                box.BackgroundColor3 = Color3.fromRGB(50, 50, 70)
-                box.TextColor3 = Color3.fromRGB(220, 220, 220)
-                box.PlaceholderColor3 = Color3.fromRGB(120, 120, 120)
-                box.PlaceholderText = opts.placeholder or ""
-                box.Font = Enum.Font.Gotham
-                box.TextSize = 13
-                box.Text = ""
-                box.Parent = container
-                local bUC = Instance.new("UICorner")
-                bUC.CornerRadius = UDim.new(0, 4)
-                bUC.Parent = box
-                container.Size = UDim2.new(1, -10, 0, 60)
-                box.FocusLost:Connect(function(enter)
-                    if enter then opts.callback(box.Text) end
-                end)
-            end
+            local box = Instance.new("TextBox")
+            box.Size = UDim2.new(1, -10, 0, 24)
+            box.Position = UDim2.new(0, 5, 0, 22)
+            box.BackgroundColor3 = Color3.fromRGB(50, 50, 72)
+            box.TextColor3 = Color3.fromRGB(220, 220, 220)
+            box.PlaceholderColor3 = Color3.fromRGB(120, 120, 140)
+            box.PlaceholderText = placeholder
+            box.Font = Enum.Font.Gotham
+            box.TextSize = 13
+            box.Text = ""
+            box.ClearTextOnFocus = false
+            box.Parent = container
+            local bUC = Instance.new("UICorner"); bUC.CornerRadius = UDim.new(0, 4); bUC.Parent = box
+            box.FocusLost:Connect(function(enter) if enter then cb(box.Text) end end)
         end
-
-        local function addButton(text, cb) addWidget("button", text, {callback = cb}) end
-        local function addToggle(text, def, cb) addWidget("toggle", text, {default = def, callback = cb}) end
-        local function addSlider(text, min, max, def, inc, cb) addWidget("slider", text, {min = min, max = max, default = def, increment = inc, callback = cb}) end
-        local function addInput(text, placeholder, cb) addWidget("input", text, {placeholder = placeholder, callback = cb}) end
 
         btn.MouseButton1Click:Connect(function()
             for _, p in pairs(pages) do p.Visible = false end
+            if activeTabBtn then activeTabBtn.BackgroundColor3 = Color3.fromRGB(50, 50, 72) end
+            btn.BackgroundColor3 = Color3.fromRGB(70, 70, 100)
+            activeTabBtn = btn
             pageFrame.Visible = true
             pageContainer.CanvasSize = UDim2.new(0, 0, 0, pageLayoutInner.AbsoluteContentSize.Y + 20)
         end)
 
-        return {addButton = addButton, addToggle = addToggle, addSlider = addSlider, addInput = addInput, addWidget = addWidget, frame = pageFrame, layout = pageLayoutInner}
+        return {addButton = addButton, addToggle = addToggle, addSlider = addSlider, addInput = addInput}
     end
-
-    -- pierwsza zakładka aktywna
-    local first = true
 
     -- ====== LOGIKA ======
     local function getChar() return plr.Character end
@@ -521,9 +530,8 @@ if not Rayfield then
         for _, c in ipairs(t1.frame:GetChildren()) do
             if c:IsA("Frame") then
                 for _, b in ipairs(c:GetChildren()) do
-                    if b:IsA("TextButton") and (b.Text:find("Fly") or b.Text:find("fly") or b.Text:find("FLY")) and (b.Text:find("[ON]") or b.Text:find("[OFF]")) then
-                        b:Click()
-                        return
+                    if b:IsA("TextButton") and (b.Text:find("Fly") or b.Text:find("fly")) and (b.Text:find("[ON]") or b.Text:find("[OFF]")) then
+                        b:Click(); return
                     end
                 end
             end
@@ -533,9 +541,8 @@ if not Rayfield then
         for _, c in ipairs(t1.frame:GetChildren()) do
             if c:IsA("Frame") then
                 for _, b in ipairs(c:GetChildren()) do
-                    if b:IsA("TextButton") and (b.Text:find("Noclip") or b.Text:find("noclip") or b.Text:find("NOCLIP")) and (b.Text:find("[ON]") or b.Text:find("[OFF]")) then
-                        b:Click()
-                        return
+                    if b:IsA("TextButton") and (b.Text:find("Noclip") or b.Text:find("noclip")) and (b.Text:find("[ON]") or b.Text:find("[OFF]")) then
+                        b:Click(); return
                     end
                 end
             end
@@ -545,9 +552,8 @@ if not Rayfield then
         for _, c in ipairs(t1.frame:GetChildren()) do
             if c:IsA("Frame") then
                 for _, b in ipairs(c:GetChildren()) do
-                    if b:IsA("TextButton") and (b.Text:find("Speed") or b.Text:find("speed") or b.Text:find("SPEED")) and (b.Text:find("[ON]") or b.Text:find("[OFF]")) then
-                        b:Click()
-                        return
+                    if b:IsA("TextButton") and (b.Text:find("Speed") or b.Text:find("speed")) and (b.Text:find("[ON]") or b.Text:find("[OFF]")) then
+                        b:Click(); return
                     end
                 end
             end
@@ -556,19 +562,24 @@ if not Rayfield then
 
     -- aktywuj pierwszą zakładkę
     for _, p in pairs(pages) do p.Visible = false end
-    for _, p in pairs(pages) do p.Visible = true; break end
+    for k, p in pairs(pages) do p.Visible = true; break end
     pageContainer.CanvasSize = UDim2.new(0, 0, 0, pageLayout.AbsoluteContentSize.Y + 20)
     pageLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
         pageContainer.CanvasSize = UDim2.new(0, 0, 0, pageLayout.AbsoluteContentSize.Y + 20)
     end)
 
-    print("[BlazeCode x Turcja] Loaded (fallback GUI)")
+    print("[BlazeCode x Turcja] Loaded (fallback GUI — no Rayfield)")
     return
 end
 
 -- ============================================================
--- RAYFIELD MODE (jeśli załadowany)
+-- RAYFIELD MODE (jeśli załadowany) — bez Lucide Icons
 -- ============================================================
+-- Używamy pustej ikony zamiast 6031094663
+local function emptyIcon()
+    return "rbxasset://textures/ui/GuiImagePlaceholder.png"
+end
+
 local Window = Rayfield:CreateWindow({
     Name = "BlazeCode x Turcja",
     LoadingTitle = "BlazeCode",
@@ -592,7 +603,7 @@ local function getRoot(p) local c = getChar(p); return c and c:FindFirstChild("H
 local function getHum(p) local c = getChar(p); return c and c:FindFirstChildOfClass("Humanoid") end
 
 -- ====== TAB 1 — LOCALS ======
-local T1 = Window:CreateTab("Locals", "6031094663")
+local T1 = Window:CreateTab("Locals", emptyIcon())
 
 local flyActive, flySpeed = false, 50
 local bG, bV
@@ -688,7 +699,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- ====== TAB 2 — TP ======
-local T2 = Window:CreateTab("TP & Control", "6031094663")
+local T2 = Window:CreateTab("TP & Control", emptyIcon())
 local tpName = ""
 T2:CreateInput({ Name = "TP to player", PlaceholderText = "Username", RemoveTextAfterFocusLost = false, Callback = function(v) tpName = v end })
 T2:CreateButton({ Name = "TP to Player", Callback = function()
@@ -727,7 +738,7 @@ T2:CreateToggle({ Name = "Watch Player", CurrentValue = false, Callback = functi
 end})
 
 -- ====== TAB 3 — COMBAT ======
-local T3 = Window:CreateTab("Combat", "6031094663")
+local T3 = Window:CreateTab("Combat", emptyIcon())
 local aimOn, silentOn, aimF = false, false, 90
 T3:CreateToggle({ Name = "Aimbot", CurrentValue = false, Callback = function(v) aimOn = v end })
 T3:CreateToggle({ Name = "Silent Aim", CurrentValue = false, Callback = function(v) silentOn = v end })
@@ -773,7 +784,7 @@ RunService.RenderStepped:Connect(function()
 end)
 
 -- ====== TAB 4 — BYPASS ======
-local T4 = Window:CreateTab("Bypasses", "6031094663")
+local T4 = Window:CreateTab("Bypasses", emptyIcon())
 T4:CreateButton({ Name = "Chat Bypass", Callback = function()
     local old = LP.SayMessageRequest
     LP.SayMessageRequest = function(msg, ...)
@@ -792,7 +803,7 @@ T4:CreateButton({ Name = "Anti-Cheat Bypass", Callback = function()
 end})
 
 -- ====== TAB 5 — WORLD ======
-local T5 = Window:CreateTab("World", "6031094663")
+local T5 = Window:CreateTab("World", emptyIcon())
 T5:CreateButton({ Name = "Bring All Items", Callback = function()
     local mr = getRoot(LP); if not mr then return end
     for _, o in ipairs(Workspace:GetDescendants()) do
@@ -807,7 +818,7 @@ end})
 T5:CreateSlider({ Name = "Gravity", Min = -200, Max = 200, Default = 196.2, Increment = 1, Callback = function(v) Workspace.Gravity = v end })
 
 -- ====== TAB 6 — ADVANCED ======
-local T6 = Window:CreateTab("Advanced", "6031094663")
+local T6 = Window:CreateTab("Advanced", emptyIcon())
 T6:CreateButton({ Name = "Infinite Jump", Callback = function()
     local h = getHum(LP); if h then h.JumpPower = 200 end
     UserInputService.JumpRequest:Connect(function() local h2 = getHum(LP); if h2 then h2:ChangeState(Enum.HumanoidStateType.Jumping) end end)
@@ -820,7 +831,7 @@ end})
 T6:CreateSlider({ Name = "Jump Power", Min = 50, Max = 500, Default = 50, Increment = 5, Callback = function(v) local h = getHum(LP); if h then h.JumpPower = v end end })
 
 -- ====== TAB 7 — KEYBINDS ======
-local T7 = Window:CreateTab("Keybinds", "6031094663")
+local T7 = Window:CreateTab("Keybinds", emptyIcon())
 T7:CreateKeybind({ Name = "Toggle Fly", CurrentKeybind = "F", Callback = function() local tab = Window:FindTab("Locals"); if tab then local t = tab:FindToggle("Fly"); if t then t:SetValue(not flyActive) end end end })
 T7:CreateKeybind({ Name = "Toggle Noclip", CurrentKeybind = "N", Callback = function() local tab = Window:FindTab("Locals"); if tab then local t = tab:FindToggle("Noclip"); if t then t:SetValue(not ncActive) end end end })
 T7:CreateKeybind({ Name = "Toggle Speed", CurrentKeybind = "G", Callback = function() local tab = Window:FindTab("Locals"); if tab then local t = tab:FindToggle("Speed"); if t then t:SetValue(not spdActive) end end end })
